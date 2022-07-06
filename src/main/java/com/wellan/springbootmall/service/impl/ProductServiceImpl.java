@@ -23,6 +23,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void deleteProductById(Integer productId) {
+        productDao.deleteProductById(productId);
+    }
+
+    @Override
     public Product getProductById(Integer productId) {
         return productDao.getProductById(productId);
     }
