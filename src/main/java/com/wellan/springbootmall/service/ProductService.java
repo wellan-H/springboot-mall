@@ -3,7 +3,12 @@ package com.wellan.springbootmall.service;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 
+import java.util.List;
+
 public interface ProductService {
+    //回傳商品列表
+    List<Product> getProducts();
+
     //提供功能，根據商品id得到商品
     Product getProductById(Integer productId);
 
@@ -13,4 +18,5 @@ public interface ProductService {
 
 
     void deleteProductById(Integer productId);
+
 }

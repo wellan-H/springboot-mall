@@ -3,8 +3,13 @@ package com.wellan.springbootmall.dao;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 
+import java.util.List;
+
 public interface ProductDao {
-//    根據productId搜尋商品
+    //回傳商品列表
+    List<Product> getProducts();
+
+    //    根據productId搜尋商品
     Product getProductById(Integer productId);
 
     Integer createProduct(ProductRequest productRequest);
@@ -12,4 +17,5 @@ public interface ProductDao {
     void updateProduct(Integer productId, ProductRequest productRequest);
 
     void deleteProductById(Integer productId);
+
 }

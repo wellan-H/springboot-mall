@@ -10,12 +10,21 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class ProductController {
+    @GetMapping("/products")//查詢商品列表
+    public ResponseEntity<List<Product>> getProducts(){
+        List<Product> productList = productService.getProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+//        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND
+//        RestFul的設計理念，每一個url都是一個資源，即使當中的資料不存在，
+//        但GET/products的資源是存在的
+    }
     @Autowired
     private ProductService productService;
-    @GetMapping("/products/{productId}")
+    @GetMapping("/products/{productId}")//查詢特定商品
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId){
       Product product = productService.getProductById(productId);
       if(product!=null){
@@ -55,4 +64,5 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
+
 }
