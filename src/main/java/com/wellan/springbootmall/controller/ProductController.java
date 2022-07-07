@@ -21,14 +21,19 @@ public class ProductController {
     private ProductService productService;
     @GetMapping("/products")//查詢商品列表
     public ResponseEntity<List<Product>> getProducts(
+//            查詢條件 filtering
             @RequestParam(required = false) ProductCategory category,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+//            排序sorting
+            @RequestParam(defaultValue = "created_date")  String orderBy,//表示根據甚麼欄位排序，如價格、日期等
+            @RequestParam(defaultValue = "desc")  String sort//表示為升序asc或是降序desc排序
     ){
         //將所有變數放入新的ProductQueryParams，統一管理參數
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
-
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
         List<Product> productList = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 //        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND
