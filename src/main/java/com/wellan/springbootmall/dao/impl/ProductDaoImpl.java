@@ -1,5 +1,6 @@
 package com.wellan.springbootmall.dao.impl;
 
+import com.wellan.springbootmall.constant.ProductCategory;
 import com.wellan.springbootmall.dao.ProductDao;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
@@ -22,12 +23,21 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
+    public List<Product> getProducts(ProductCategory category,String search) {
         String sql = "select product_id, product_name, category, image_url, " +
                 "price, stock, description, created_date, " +
-                "last_modified_date from  product";
+                "last_modified_date from  product WHERE 1=1";
+        //1=1用意在拼接sql語句，避免後面為null
 
         Map<String,Object> map = new HashMap<>();
+        if(category!=null){
+            sql = sql+" AND category=:category";//AND前一定要預留一個空白鍵
+            map.put("category",category.name());//將Enum類型轉為字串，需要使用.name()方法
+        }
+        if(search != null){
+            sql = sql + " AND product_name LIKE :search ";//AND前一定要預留一個空白鍵
+            map.put("search","%"+search+"%");//模糊查詢，百分比%一定要使用拼接寫在map的值，不可寫在語句中。
+        }
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }

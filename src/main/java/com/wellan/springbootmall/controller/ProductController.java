@@ -1,5 +1,6 @@
 package com.wellan.springbootmall.controller;
 
+import com.wellan.springbootmall.constant.ProductCategory;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 import com.wellan.springbootmall.service.ProductService;
@@ -14,16 +15,20 @@ import java.util.List;
 
 @RestController
 public class ProductController {
+
+    @Autowired
+    private ProductService productService;
     @GetMapping("/products")//查詢商品列表
-    public ResponseEntity<List<Product>> getProducts(){
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ){
+        List<Product> productList = productService.getProducts(category,search);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 //        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND
 //        RestFul的設計理念，每一個url都是一個資源，即使當中的資料不存在，
 //        但GET/products的資源是存在的
     }
-    @Autowired
-    private ProductService productService;
     @GetMapping("/products/{productId}")//查詢特定商品
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId){
       Product product = productService.getProductById(productId);

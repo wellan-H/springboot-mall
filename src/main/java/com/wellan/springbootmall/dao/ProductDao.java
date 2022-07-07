@@ -1,5 +1,6 @@
 package com.wellan.springbootmall.dao;
 
+import com.wellan.springbootmall.constant.ProductCategory;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 
@@ -7,7 +8,7 @@ import java.util.List;
 
 public interface ProductDao {
     //回傳商品列表
-    List<Product> getProducts();
+    List<Product> getProducts(ProductCategory category,String search);
 
     //    根據productId搜尋商品
     Product getProductById(Integer productId);
