@@ -1,6 +1,7 @@
 package com.wellan.springbootmall.controller;
 
 import com.wellan.springbootmall.constant.ProductCategory;
+import com.wellan.springbootmall.dto.ProductQueryParams;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 import com.wellan.springbootmall.service.ProductService;
@@ -23,7 +24,12 @@ public class ProductController {
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search
     ){
-        List<Product> productList = productService.getProducts(category,search);
+        //將所有變數放入新的ProductQueryParams，統一管理參數
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
+
+        List<Product> productList = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 //        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND
 //        RestFul的設計理念，每一個url都是一個資源，即使當中的資料不存在，
