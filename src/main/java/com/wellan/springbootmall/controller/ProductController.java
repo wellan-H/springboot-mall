@@ -12,9 +12,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
+@Validated
 public class ProductController {
 
     @Autowired
@@ -26,7 +29,12 @@ public class ProductController {
             @RequestParam(required = false) String search,
 //            排序sorting
             @RequestParam(defaultValue = "created_date")  String orderBy,//表示根據甚麼欄位排序，如價格、日期等
-            @RequestParam(defaultValue = "desc")  String sort//表示為升序asc或是降序desc排序
+            @RequestParam(defaultValue = "desc")  String sort,//表示為升序asc或是降序desc排序
+//            分頁pagination
+//            用以保護後端效能
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,//表示取得幾筆資料，最大值不大於1000最小值不得為負
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset//表示跳過幾筆資料
+
     ){
         //將所有變數放入新的ProductQueryParams，統一管理參數
         ProductQueryParams productQueryParams = new ProductQueryParams();
@@ -34,6 +42,8 @@ public class ProductController {
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
         productQueryParams.setSort(sort);
+        productQueryParams.setLimit(limit);
+        productQueryParams.setOffset(offset);
         List<Product> productList = productService.getProducts(productQueryParams);
         return ResponseEntity.status(HttpStatus.OK).body(productList);
 //        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND

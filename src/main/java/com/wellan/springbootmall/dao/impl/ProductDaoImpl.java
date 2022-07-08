@@ -30,6 +30,7 @@ public class ProductDaoImpl implements ProductDao {
         //1=1用意在拼接sql語句，避免後面為null
 
         Map<String,Object> map = new HashMap<>();
+//        查詢條件
         if(productQueryParams.getCategory()!=null){
             sql = sql+" AND category=:category";//AND前一定要預留一個空白鍵
             map.put("category",productQueryParams.getCategory().name());//將Enum類型轉為字串，需要使用.name()方法
@@ -38,7 +39,12 @@ public class ProductDaoImpl implements ProductDao {
             sql = sql + " AND product_name LIKE :search ";//AND前一定要預留一個空白鍵
             map.put("search","%"+productQueryParams.getSearch()+"%");//模糊查詢，百分比%一定要使用拼接寫在map的值，不可寫在語句中。
         }
+//        排序
         sql = sql +" ORDER BY " + productQueryParams.getOrderBy()+" " +productQueryParams.getSort();
+//        分頁，排在排序之後
+        sql = sql +" LIMIT :limit OFFSET :offset ";
+        map.put("limit",productQueryParams.getLimit());
+        map.put("offset",productQueryParams.getOffset());
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
