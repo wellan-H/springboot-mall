@@ -5,6 +5,7 @@ import com.wellan.springbootmall.dto.ProductQueryParams;
 import com.wellan.springbootmall.dto.ProductRequest;
 import com.wellan.springbootmall.model.Product;
 import com.wellan.springbootmall.service.ProductService;
+import com.wellan.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
     @GetMapping("/products")//查詢商品列表
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
 //            查詢條件 filtering
             @RequestParam(required = false) ProductCategory category,
             @RequestParam(required = false) String search,
@@ -44,8 +45,18 @@ public class ProductController {
         productQueryParams.setSort(sort);
         productQueryParams.setLimit(limit);
         productQueryParams.setOffset(offset);
+//        取得productlist
         List<Product> productList = productService.getProducts(productQueryParams);
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+//        取得product總數
+        Integer total = productService.countProduct(productQueryParams);//傳入查詢條件
+        //預期根據查詢條件，回傳條件下的商品總數有幾筆
+//        分頁
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);//商品總數資訊
+        page.setResults(productList);
+        return ResponseEntity.status(HttpStatus.OK).body(page);
 //        固定回傳200OK狀態碼，不因沒有商品而回傳NOT_FOUND
 //        RestFul的設計理念，每一個url都是一個資源，即使當中的資料不存在，
 //        但GET/products的資源是存在的

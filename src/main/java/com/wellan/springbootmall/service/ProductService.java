@@ -9,6 +9,8 @@ import java.util.List;
 public interface ProductService {
     //回傳商品列表
     List<Product> getProducts(ProductQueryParams productQueryParams);
+//    回傳根據查詢條件下的商品總數
+    Integer countProduct(ProductQueryParams productQueryParams);
 
     //提供功能，根據商品id得到商品
     Product getProductById(Integer productId);
