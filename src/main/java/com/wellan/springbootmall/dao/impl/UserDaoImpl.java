@@ -1,6 +1,7 @@
 package com.wellan.springbootmall.dao.impl;
 
 import com.wellan.springbootmall.dao.UserDao;
+import com.wellan.springbootmall.dto.UserLoginRequest;
 import com.wellan.springbootmall.dto.UserRegisterRequest;
 import com.wellan.springbootmall.model.User;
 import com.wellan.springbootmall.rowmapper.UserRowMapper;
@@ -64,4 +65,6 @@ public class UserDaoImpl implements UserDao {
         }
 
     }
+
+
 }
