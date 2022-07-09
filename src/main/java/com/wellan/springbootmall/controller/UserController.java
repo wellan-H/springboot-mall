@@ -17,10 +17,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 //    註冊新帳號
-    @PostMapping("/users/register")//資安
+    @PostMapping("/users/register")//資安問題選用post
     public ResponseEntity<User> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest){
         Integer userId = userService.register(userRegisterRequest);
         User user = userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
+
 }
