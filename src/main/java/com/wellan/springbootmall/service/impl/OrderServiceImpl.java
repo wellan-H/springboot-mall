@@ -4,6 +4,7 @@ import com.wellan.springbootmall.dao.OrderDao;
 import com.wellan.springbootmall.dao.ProductDao;
 import com.wellan.springbootmall.dto.BuyItem;
 import com.wellan.springbootmall.dto.CreateOrderRequest;
+import com.wellan.springbootmall.model.Order;
 import com.wellan.springbootmall.model.OrderItem;
 import com.wellan.springbootmall.model.Product;
 import com.wellan.springbootmall.service.OrderService;
@@ -45,5 +46,14 @@ public class OrderServiceImpl implements OrderService {
         Integer orderId = orderDao.createOrder(userId,totalAmount);
         orderDao.createOrderItems(orderId,orderItemList);//在OrderItem中，插入相關資料
         return orderId;
+    }
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+        List<OrderItem> orderItemList = orderDao.getOrderIntemsByOrderId(orderId);
+//        一筆Order會包含多個orderItem，也就是一個orderItemList
+        order.setOrderItemList(orderItemList);
+        return order;
     }
 }
