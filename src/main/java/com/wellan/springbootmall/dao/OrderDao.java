@@ -1,5 +1,6 @@
 package com.wellan.springbootmall.dao;
 
+import com.wellan.springbootmall.dto.OrderQueryParams;
 import com.wellan.springbootmall.model.Order;
 import com.wellan.springbootmall.model.OrderItem;
 
@@ -13,4 +14,8 @@ public interface OrderDao {
     Order getOrderById(Integer orderId);
 
     List<OrderItem> getOrderIntemsByOrderId(Integer orderId);
+
+    List<Order> getOrders(OrderQueryParams orderQueryParams);
+
+    Integer countOrder(OrderQueryParams orderQueryParams);
 }

@@ -5,6 +5,7 @@ import com.wellan.springbootmall.dao.ProductDao;
 import com.wellan.springbootmall.dao.UserDao;
 import com.wellan.springbootmall.dto.BuyItem;
 import com.wellan.springbootmall.dto.CreateOrderRequest;
+import com.wellan.springbootmall.dto.OrderQueryParams;
 import com.wellan.springbootmall.model.Order;
 import com.wellan.springbootmall.model.OrderItem;
 import com.wellan.springbootmall.model.Product;
@@ -83,5 +84,21 @@ public class OrderServiceImpl implements OrderService {
 //        一筆Order會包含多個orderItem，也就是一個orderItemList
         order.setOrderItemList(orderItemList);
         return order;
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+        for(Order order: orderList){
+            List<OrderItem> orderItemList = orderDao.getOrderIntemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+        return orderList;
+    }
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
     }
 }
